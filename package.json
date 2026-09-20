@@ -1,0 +1,11 @@
+{
+  "name": "cafe-finder",
+  "version": "1.0.0",
+  "description": "3D Immersive Cafe Finder with Google Maps Integration",
+  "private": true,
+  "scripts": {
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

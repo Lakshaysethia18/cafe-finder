@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CafeFinder ☕ - Discover Your Perfect Café</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Loading Screen -->
+  <div id="loader" class="loader">
+    <div class="loader-content">
+      <div class="coffee-cup-loader">
+        <div class="cup"></div>
+        <div class="steam"><span></span><span></span><span></span></div>
+      </div>
+      <h2>Brewing your experience...</h2>
+    </div>
+  </div>
+
+  <!-- Three.js Canvas Container -->
+  <canvas id="three-canvas"></canvas>
+
+  <div class="content-wrapper">
+    <!-- Navigation Bar -->
+    <nav class="navbar glass-card">
+      <div class="nav-container">
+        <a href="#" class="logo">☕ CafeFinder</a>
+        <div class="nav-links">
+          <a href="#hero" class="nav-link">Home</a>
+          <a href="#results" class="nav-link">Search</a>
+          <a href="#map-section" class="nav-link">Map</a>
+          <a href="#about" class="nav-link">About</a>
+        </div>
+        <button id="hamburger" class="mobile-menu-btn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+      <div class="hero-content glass-card fade-in">
+        <h1>Discover Your Perfect Café</h1>
+        <p class="subtitle">Find the best cafes near you with real-time data, reviews, and 3D exploration</p>
+        
+        <div class="search-box">
+          <div class="search-inputs">
+            <input type="text" id="pincode-input" placeholder="Enter pincode, city, cafe, or restaurant name..." aria-label="Search by pincode, city, cafe, or restaurant name">
+            <select id="radius-select" aria-label="Search radius">
+              <option value="1000">1 km</option>
+              <option value="3000" selected>3 km</option>
+              <option value="5000">5 km</option>
+              <option value="10000">10 km</option>
+            </select>
+            <button id="search-btn" class="btn btn-primary">Search</button>
+          </div>
+          <div class="search-actions">
+            <span class="divider">or</span>
+            <button id="location-btn" class="btn btn-secondary">
+              <span class="gps-icon">📍</span> Use My Location
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar glass-card fade-in">
+      <div class="stat-item">
+        <span class="stat-number" data-target="10000">0</span>+
+        <span class="stat-label">Cafes Mapped</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" data-target="50">0</span>+
+        <span class="stat-label">Cities</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" data-target="4.8">0.0</span>
+        <span class="stat-label">Average Rating</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-icon">🔄</span>
+        <span class="stat-label">Real-time Data</span>
+      </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results" class="results-section fade-in">
+      <div id="results-header" class="results-header">
+        <h2>Cafes Near You <span id="result-count" class="count-badge"></span></h2>
+        <div class="sort-controls">
+          <label for="sort-select">Sort by:</label>
+          <select id="sort-select" class="glass-select">
+            <option value="distance">Distance</option>
+            <option value="rating">Rating</option>
+            <option value="name">Name</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="cafe-grid" class="cafe-grid">
+        <!-- Skeleton Loaders -->
+        <div class="cafe-card skeleton-card glass-card">
+          <div class="skeleton skeleton-img"></div>
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text short"></div>
+        </div>
+        <div class="cafe-card skeleton-card glass-card">
+          <div class="skeleton skeleton-img"></div>
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text short"></div>
+        </div>
+        <div class="cafe-card skeleton-card glass-card">
+          <div class="skeleton skeleton-img"></div>
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text short"></div>
+        </div>
+      </div>
+
+      <div id="empty-state" class="empty-state hidden">
+        <div class="empty-icon">🔍</div>
+        <h3>No cafes found</h3>
+        <p>Enter a pincode, city, cafe, or restaurant name to discover places near you</p>
+      </div>
+    </section>
+
+    <!-- Map Section -->
+    <section id="map-section" class="map-section fade-in">
+      <div class="map-wrapper glass-card">
+        <div id="map-container" class="map-container"></div>
+        <div class="map-overlay-controls">
+          <button id="map-recenter" class="btn-icon" title="Recenter Map">🎯</button>
+          <button id="map-type-toggle" class="btn-icon" title="Toggle Map/Satellite">🗺️</button>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer glass-card">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <h3>☕ CafeFinder</h3>
+          <p>Powered by Google Maps</p>
+        </div>
+        <div class="footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Contact</a>
+        </div>
+        <div class="footer-social">
+          <a href="#" class="social-icon">📱</a>
+          <a href="#" class="social-icon">📸</a>
+          <a href="#" class="social-icon">🐦</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 CafeFinder. All rights reserved.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Cafe Detail Modal -->
+  <div id="cafe-modal" class="modal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content glass-card">
+      <button class="modal-close">&times;</button>
+      <div class="modal-body">
+        
+        <!-- Photo Gallery -->
+        <div id="modal-photos" class="photo-gallery"></div>
+        
+        <!-- Cafe Info -->
+        <div id="modal-info" class="cafe-info">
+          <h2 id="modal-name"></h2>
+          <div id="modal-rating" class="rating-display"></div>
+          <p id="modal-address" class="address"></p>
+          <p id="modal-phone" class="phone"></p>
+          <div id="modal-hours" class="hours"></div>
+          
+          <div class="modal-actions">
+            <a id="modal-directions" class="btn btn-primary" target="_blank">📍 Get Directions</a>
+            <a id="modal-website" class="btn btn-secondary" target="_blank">🌐 Website</a>
+            <button id="modal-menu-btn" class="btn btn-accent">📋 View Menu</button>
+            <button id="modal-review-btn" class="btn btn-accent">⭐ Write Review</button>
+          </div>
+        </div>
+        
+        <!-- Tabs: Reviews | Menu -->
+        <div class="modal-tabs">
+          <button class="tab-btn active" data-tab="reviews">Reviews</button>
+          <button class="tab-btn" data-tab="menu">Menu</button>
+        </div>
+        
+        <!-- Tab Content -->
+        <div id="tab-reviews" class="tab-content active">
+          <div id="reviews-list"></div>
+          
+          <!-- Review Form -->
+          <div id="review-form" class="review-form">
+            <h3>Write a Review</h3>
+            <input type="text" id="review-author" placeholder="Your Name" maxlength="50" />
+            <div id="review-stars" class="star-input">
+              <span class="star" data-rating="1">★</span>
+              <span class="star" data-rating="2">★</span>
+              <span class="star" data-rating="3">★</span>
+              <span class="star" data-rating="4">★</span>
+              <span class="star" data-rating="5">★</span>
+            </div>
+            <textarea id="review-text" placeholder="Share your experience..." maxlength="1000" rows="4"></textarea>
+            <div class="review-form-footer">
+              <span id="char-count">0/1000</span>
+              <button id="submit-review" class="btn btn-primary">Submit Review</button>
+            </div>
+          </div>
+        </div>
+        
+        <div id="tab-menu" class="tab-content">
+          <div id="menu-content"></div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  
+  <!-- Note: Google Maps API loaded dynamically in app.js or replace below comment -->
+  <!-- <script async src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap"></script> -->
+
+  <script src="js/utils.js"></script>
+  <script src="js/three-scene.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/cafe-card.js"></script>
+  <script src="js/reviews.js"></script>
+  <script src="js/menu.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
