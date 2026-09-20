@@ -51,7 +51,7 @@ window.CafeApp = (() => {
     // NOTE: For production, set your Google Maps API key in the Vercel environment variables
     // and create an endpoint that returns it, or embed it during build.
     // For development, replace 'YOUR_API_KEY' below with your actual key.
-    const apiKey = '';
+    const apiKey = 'YOUR_API_KEY';
     
     if (apiKey === 'YOUR_API_KEY') {
       console.warn('⚠️ Google Maps API key not set. Map features will be limited.');
